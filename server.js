@@ -10,4 +10,4 @@ var server = http.createServer(function(req, res, next) {
 	require('./router').get(req, res);
 });
 server.listen(http_port, http_IP);
-console.log('TO-LIST APP listening to http://' + http_IP + ':' + http_port);
+console.log('TO-DO LIST APP listening to http://' + http_IP + ':' + http_port);

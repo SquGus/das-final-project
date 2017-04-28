@@ -1,0 +1,20 @@
+{
+  "name": "das-final-project",
+  "version": "1.0.0",
+  "description": "DAS final project",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "license": "MIT",
+  "dependencies": {
+    "moment": "^2.18.1"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": ">=4.3"
+  }
+}

@@ -20,11 +20,30 @@ exports.get = function(req, res, next) {
 			res.write(data, 'utf8');
 			res.end();
 		});
+	} else if (/.(js)$/.test(path)) {
+		res.writeHead(200, {
+			'Content-Type': 'text/plain',
+			'Trailer': 'javascript'
+		});
+		fs.readFile(__dirname + path, 'utf8', function(err, data) {
+			if (err) {
+				throw err;
+			}
+			res.write(data, 'utf8');
+			res.addTrailers({
+				'javascript': '7895bf4b8828b55ceaf47747b4bca667'
+			});
+			res.end();
+		});
 	} else {
 		
 		if (path === '/' || path === '/home') {
 			require('./controllers/home').get(req, res);
-		} else {
+		}
+		else if(path === '/api/data') {
+			require('./controllers/api-data').get(req, res);
+		}
+		else {
 			require('./controllers/404').get(req, res);
 		}
 	}

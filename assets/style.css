@@ -1,1 +1,19 @@
- * {font-family:arial, sans-serif;}
+.fixed-action-btn.left {
+  left: 23px; }
+
+.fixed-action-btn .btn-floating i {
+  font-size: 2.6rem; }
+
+.badge {
+  font-weight: 300 !important;
+  font-size: 0.8rem !important;
+  color: #fff !important;
+  border-radius: 2px !important; }
+  .badge.high {
+    background-color: #c62828 !important; }
+  .badge.medium {
+    background-color: #f9a825 !important; }
+  .badge.low {
+    background-color: #2e7d32 !important; }
+  .badge.complete {
+    background-color: #0277bd !important; }
