@@ -21,7 +21,8 @@ $(function() {
 	// renders todos into list
 	function renderTodo(todo) {
 		var html =
-				'<a class="collection-item" href="#modal-todo"'+
+				'<a class="collection-item" id="'+todo.id+'" href="#modal-todo"'+
+					'data-id="'+todo.id+'"'+
 					'data-title="'+todo.title+'"'+
 					'data-priority="'+todo.priority+'"'+
 					'data-details="'+todo.details+'"'+
@@ -38,11 +39,12 @@ $(function() {
 		list.append(html);
 	};
 	
-	// paints todo details in modal
+	// renders todo details in modal
 	function renderModalTodo(todo) {
 		todo = $(todo);
 		
-		var title = todo.attr('data-title'),
+		var id = todo.attr('data-id'),
+				title = todo.attr('data-title'),
 				priority = todo.attr('data-priority'),
 				details = todo.attr('data-details'),
 				created = todo.attr('data-created'),
@@ -51,14 +53,18 @@ $(function() {
 				complete = todo.attr('data-complete'),
 				duration = getDuration(created, elapsed);
 		
-		modalTodo.find('.modal-header').text(title);
+		modalTodo.find('.modal-header').text(title + " - ");
 		modalTodo.find('.modal-header').append(
-			'<small class="right">'+
-				'('+priority+')'+
-			'</small>'
+			'<span class="'+priority+'-text">'+
+				priority+
+			'</span>'+
+			'<button class="right waves-effect waves-light btn"><i class="material-icons">play_arrow</i></button>'
 		);
 		
 		var html =
+				'<h5>'+
+					details+
+				'</h5>'+
 				'<table>'+
 					'<tbody>'+
 						'<tr>'+
@@ -78,7 +84,39 @@ $(function() {
 				;
 		
 		modalTodo.find('.modal-details').html(html);
-	}
+		modalTodo.find('#trigger-edit').attr('data-id', id);
+	};
+	
+	// renders todo info on edit modal
+	function renderModalEdit(todo) {
+		var form = $('#form-todo-edit');
+		
+		var id = todo.attr('data-id'),
+				title = todo.attr('data-title'),
+				priority = todo.attr('data-priority'),
+				details = todo.attr('data-details'),
+				created = todo.attr('data-created'),
+				elapsed = parseInt(todo.attr('data-elapsed')),
+				finish = todo.attr('data-finish'),
+				complete = todo.attr('data-complete'),
+				duration = getElapsed(created, elapsed).split(':');
+		
+		form.find('#inputId').val(id);
+		form.find('#inputTitle').val(title);
+		form.find('#inputPriority').val(priority);
+		form.find('#inputDetails').val(details);
+		form.find('#inputDetails').trigger('autoresize');
+		form.find('#inputCreatedDate').val(getDate(created));
+		form.find('#inputCreatedTime').val(getTime(created));
+		form.find('#inputFinishDate').val(getDate(finish));
+		form.find('#inputFinishTime').val(getTime(finish));
+		form.find('#inputElapsedHours').val(duration[0]);
+		form.find('#inputElapsedMinutes').val(duration[1]);
+		form.find('#inputElapsedSeconds').val(duration[2]);
+		
+		Materialize.updateTextFields();
+		$('select').material_select();
+	};
 	
 	// returns duration in string
 	function getDuration(createdAt, elapsed) {
@@ -91,7 +129,41 @@ $(function() {
 		return duration;
 	};
 	
-	// manages data and sends post
+	// returns elapsed time in string
+	function getElapsed(createdAt, elapsed) {
+		var elapsedTime = moment(createdAt).add(elapsed,'seconds').format('X');
+		var initTime = moment(createdAt).format('X');
+		var delta = elapsedTime - initTime;
+		delta = moment.duration(delta, "s");
+		var duration = delta.hours() + ':' + delta.minutes() + ':' + delta.seconds();
+		
+		return duration;
+	};
+	
+	// returns date in string
+	function getDate(datetime) {
+		return moment(datetime).format("DD MMM, YYYY");
+	};
+	
+	// returns time in string
+	function getTime(datetime) {
+		return moment(datetime).format("HH:MM");
+	};
+	
+	// joins elapsed time and returns seconds
+	function joinElapsed(elapsedHours, elapsedMinutes, elapsedSeconds) {
+		var h = parseInt(elapsedHours);
+		var m = parseInt(elapsedMinutes);
+		var s = parseInt(elapsedSeconds);
+		
+		var joined = moment.duration(h, 'h');
+		joined = joined.add(moment.duration(m, 'm'));
+		joined = joined.add(moment.duration(s, 's'));
+		
+		return joined.asSeconds();
+	};
+	
+	// manages data and sends add POST
 	function addTodo(form) {
 		var name = form.find('#inputTitle').val(),
 				priority = form.find('#inputPriority').val(),
@@ -116,10 +188,57 @@ $(function() {
 			'/api/add',
 			JSON.stringify(json)
 		).done(function(data) {
-			console.log(data);
+			location.reload();
 		}).fail(function(error) {
 			console.log(error);
 		});
+	};
+	
+	// manages data and sends edit POST
+	function editTodo(form) {
+		var id = form.find("#inputId").val(),
+				name = form.find('#inputTitle').val(),
+				priority = form.find('#inputPriority').val(),
+				beginDate = form.find('#inputCreatedDate').val(),
+				beginTime = form.find('#inputCreatedTime').val().split(':'),
+				finishDate = form.find('#inputFinishDate').val(),
+				finishTime = form.find('#inputFinishTime').val().split(':'),
+				elapsedHours = form.find('#inputElapsedHours').val(),
+				elapsedMinutes = form.find('#inputElapsedMinutes').val(),
+				elapsedSeconds = form.find('#inputElapsedSeconds').val(),
+				details = form.find('#inputDetails').val(),
+				complete = form.find('#inputComplete'),
+				elapsedTime = joinElapsed(elapsedHours, elapsedMinutes, elapsedSeconds);
+		
+		var isComplete = (complete == 'checked') ? true : false;
+		console.log(complete);
+		
+		var createdAt = moment(beginDate, 'D MMM, YYYY');
+		createdAt = createdAt.add(beginTime[0], 'hours').add(beginTime[1], 'minutes');
+		var finishAt = moment(finishDate, 'D MMM, YYYY');
+		finishAt = finishAt.add(finishTime[0], 'hours').add(finishTime[1], 'minutes');
+//		
+		var json = {
+			"id": id,
+			"title": name,
+			"priority": priority,
+			"details": details,
+			"createdAt": createdAt,
+			"elapsedTime": elapsedTime,
+			"finishAt": finishAt,
+			"isComplete": isComplete
+		};
+		
+		console.log(json);
+//		
+//		$.post(
+//			'/api/add',
+//			JSON.stringify(json)
+//		).done(function(data) {
+//			location.reload();
+//		}).fail(function(error) {
+//			console.log(error);
+//		});
 	};
 	
 	/* EVENT FUNCTIONS */
@@ -133,6 +252,19 @@ $(function() {
 		e.preventDefault();
 		var form = $(this);
 		addTodo(form);
+	});
+	
+	// triggers when edit button is pressed
+	$('body').on('click', '#trigger-edit', function() {
+		var id = $('#trigger-edit').attr('data-id');
+		renderModalEdit( $('.collection-item#' + id) );
+	});
+	
+	// triggers when form to add todo is submitted
+	$('body').on('submit', '#form-todo-edit', function(e) {
+		e.preventDefault();
+		var form = $(this);
+		editTodo(form);
 	});
 	
 	

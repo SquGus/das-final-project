@@ -1,5 +1,6 @@
-var addModal = require('../views/add-modal');
-var todoModal = require('../views/todo-modal');
+var modalAdd = require('../views/modal-add');
+var modalEdit = require('../views/modal-edit');
+var modalTodo = require('../views/modal-todo');
 
 exports.build = function(title, pagetitle, content) {
 	// builds basic template
@@ -38,8 +39,9 @@ exports.build = function(title, pagetitle, content) {
       			'<i class="large material-icons">av_timer</i>',
 					'</a>',
 				'</div>',
-				addModal.getPartial,
-				todoModal.getPartial,
+				modalAdd.getPartial,
+				modalEdit.getPartial,
+				modalTodo.getPartial,
 			'</main>',
 			'<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>',
 			'<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>',

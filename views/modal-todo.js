@@ -6,6 +6,8 @@ exports.getPartial =
 		'</div>'+
 		'<div class="modal-footer">'+
 			'<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>'+
+			'<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Delete</a>'+
+			'<a href="#modal-edit" id="trigger-edit" class="modal-action modal-close waves-effect waves-green btn-flat" data-id="">Edit</a>'+
 		'</div>'+
 	'</div>'
 ;

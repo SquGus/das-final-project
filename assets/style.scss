@@ -5,6 +5,32 @@ $green: #2e7d32;
 $yellow: #f9a825;
 $red: #c62828;
 
+.high {
+	background-color: $red !important;
+}
+.medium {
+	background-color: $yellow !important;
+}
+.low {
+	background-color: $green !important;
+}
+.complete {
+	background-color: $blue !important;
+}
+	
+.high-text {
+	color: $red !important;
+}
+.medium-text {
+	color: $yellow !important;
+}
+.low-text {
+	color: $green !important;
+}
+.complete-text {
+	color: $blue !important;
+}
+
 .fixed-action-btn {
 	&.left {
 		left: 23px;
@@ -20,19 +46,6 @@ $red: #c62828;
 	font-size: 0.8rem !important;
 	color: #fff !important;
 	border-radius: 2px !important;
-	
-	&.high {
-		background-color: $red !important;
-	}
-	&.medium {
-		background-color: $yellow !important;
-	}
-	&.low {
-		background-color: $green !important;
-	}
-	&.complete {
-		background-color: $blue !important;
-	}
 }
 
 .picker__date-display {
