@@ -7,7 +7,13 @@ var http_port = 8899;
 
 // creates server and passes req and res to router module
 var server = http.createServer(function(req, res, next) {
-	require('./router').get(req, res);
+	
+	if (req.method == 'GET') {
+		require('./router').get(req, res);
+	}
+	else if (req.method == 'POST') {
+		require('./router').post(req, res);
+	}
 });
 server.listen(http_port, http_IP);
 console.log('TO-DO LIST APP listening to http://' + http_IP + ':' + http_port);

@@ -1,3 +1,5 @@
+@import '_clockpicker';
+
 $blue: #0277bd;
 $green: #2e7d32;
 $yellow: #f9a825;
@@ -31,4 +33,8 @@ $red: #c62828;
 	&.complete {
 		background-color: $blue !important;
 	}
+}
+
+.picker__date-display {
+	display: none;
 }

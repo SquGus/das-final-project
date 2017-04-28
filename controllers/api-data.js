@@ -1,18 +1,31 @@
 // imports modules
-var data = require('../model/data');
-var moment = require('moment');
+var fs = require('fs');
+var path = require('path');
 
 exports.get = function(req, res) {
-	var todoList = data.todoList;
-	
-	todoList = JSON.stringify(todoList);
-	
-	// builds response
-	res.writeHead(200, {
-		'Content-Type': 'text/plain'
-	});
-	res.write(
-		todoList
+	// reads json file
+	var filePath = path.join(__dirname, '..', 'model', 'data.json');
+	fs.readFile(
+		filePath,
+		'utf-8',
+		function readFileCallback(err, file) {
+			if (err) {
+				// sends error code
+				console.log(err);
+				res.writeHead(500, {
+					'Content-Type': 'text/plain'
+				});
+				res.end();
+			} else {
+				// builds successful response
+				res.writeHead(200, {
+					'Content-Type': 'text/plain'
+				});
+				res.write(
+					file
+				);
+				res.end();
+			}
+		}
 	);
-	res.end();
 }

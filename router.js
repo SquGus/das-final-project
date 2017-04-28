@@ -40,11 +40,24 @@ exports.get = function(req, res, next) {
 		if (path === '/' || path === '/home') {
 			require('./controllers/home').get(req, res);
 		}
-		else if(path === '/api/data') {
+		else if(path === '/api/get') {
 			require('./controllers/api-data').get(req, res);
+		}
+		else if (path === '/api/add') {
+			require('./controllers/api-add').get(req, res);
 		}
 		else {
 			require('./controllers/404').get(req, res);
 		}
+	}
+}
+
+exports.post = function(req, res, next) {
+	req.requrl = url.parse(req.url, true)
+	// gets path of the URL request
+	var path = req.requrl.pathname;
+	
+	if (path === '/api/add') {
+		require('./controllers/api-add').post(req, res);
 	}
 }

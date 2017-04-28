@@ -7,7 +7,7 @@ $(function() {
 	/* FUNCTIONS */
 	// request for json data
 	function getData() {
-		$.get('/api/data', function() {
+		$.get('/api/get', function() {
 			
 		}).done(function(data) {
 			var json = JSON.parse(data);
@@ -91,13 +91,65 @@ $(function() {
 		return duration;
 	};
 	
+	// manages data and sends post
+	function addTodo(form) {
+		var name = form.find('#inputTitle').val(),
+				priority = form.find('#inputPriority').val(),
+				finishDate = form.find('#inputFinishDate').val(),
+				finishTime = form.find('#inputFinishTime').val().split(':'),
+				details = form.find('#inputDetails').val();
+		
+		var finishAt = moment(finishDate, 'D MMM, YYYY');
+		finishAt = finishAt.add(finishTime[0], 'hours').add(finishTime[1], 'minutes');
+		
+		var json = {
+			"title": name,
+			"priority": priority,
+			"details": details,
+			"createdAt": moment().format(),
+			"elapsedTime": 0,
+			"finishAt": finishAt,
+			"isComplete": false
+		};
+		
+		$.post(
+			'/api/add',
+			JSON.stringify(json)
+		).done(function(data) {
+			console.log(data);
+		}).fail(function(error) {
+			console.log(error);
+		});
+	};
+	
 	/* EVENT FUNCTIONS */
+	// triggers when todo is clicked
 	$('body').on('click', '.collection-item', function() {
 		renderModalTodo( $(this)[0] );
 	});
 	
+	// triggers when form to add todo is submitted
+	$('body').on('submit', '#form-todo-add', function(e) {
+		e.preventDefault();
+		var form = $(this);
+		addTodo(form);
+	});
+	
+	
 	
 	/* INITIALIZATION CALLS */
 	$('.modal').modal();
+	$('select').material_select();
+	$('.datepicker').pickadate({
+    selectMonths: true, // Creates a dropdown to control month
+    selectYears: 10, // Creates a dropdown of 15 years to control year
+		min: new Date()
+  });
+	$('.timepicker').pickatime({
+    autoclose: true,
+    twelvehour: false,
+    default: '00:00:00',
+		donetext: 'OK'
+  });
 	var data = getData();
 });

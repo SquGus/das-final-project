@@ -1,0 +1,3 @@
+{   
+    "ignore": ["js/*.js", "./model/data.js"] 
+}
