@@ -13,13 +13,13 @@ $(function() {
 			var json = JSON.parse(data);
 
 			json.forEach(function(todo, i) {
-				addTodo(todo);
+				renderTodo(todo);
 			});
 		});
 	};
 	
-	// adds todos to list
-	function addTodo(todo) {
+	// renders todos into list
+	function renderTodo(todo) {
 		var html =
 				'<a class="collection-item" href="#modal-todo"'+
 					'data-title="'+todo.title+'"'+
@@ -38,7 +38,7 @@ $(function() {
 	};
 	
 	// paints todo details in modal
-	function renderTodo(todo) {
+	function renderModalTodo(todo) {
 		todo = $(todo);
 		
 		var title = todo.attr('data-title'),
@@ -47,6 +47,7 @@ $(function() {
 				created = todo.attr('data-created'),
 				elapsed = parseInt(todo.attr('data-elapsed')),
 				finish = todo.attr('data-finish');
+		var duration = getDuration(created, elapsed);
 		
 		modalTodo.find('.modal-header').text(title);
 		modalTodo.find('.modal-header').append(
@@ -55,13 +56,6 @@ $(function() {
 			'</small>'
 		);
 		
-		var elapsedTime = moment(created).add(elapsed,'seconds').format('X');
-		var initTime = moment(created).format('X');
-		
-		var delta = elapsedTime - initTime;
-		delta = moment.duration(delta, "s");
-		var duration = delta.hours() + ':' + delta.minutes() + ':' + delta.seconds();
-				
 		var html =
 				'<table>'+
 					'<tbody>'+
@@ -84,9 +78,20 @@ $(function() {
 		modalTodo.find('.modal-details').html(html);
 	}
 	
+	// returns duration in string
+	function getDuration(createdAt, elapsed) {
+		var elapsedTime = moment(createdAt).add(elapsed,'seconds').format('X');
+		var initTime = moment(createdAt).format('X');
+		var delta = elapsedTime - initTime;
+		delta = moment.duration(delta, "s");
+		var duration = delta.hours() + 'h ' + delta.minutes() + 'm ' + delta.seconds() + 's';
+		
+		return duration;
+	};
+	
 	/* EVENT FUNCTIONS */
 	$('body').on('click', '.collection-item', function() {
-		renderTodo( $(this)[0] );
+		renderModalTodo( $(this)[0] );
 	});
 	
 	

@@ -31,7 +31,7 @@ exports.build = function(title, pagetitle, content) {
 					'</a>',
 				'</div>',
 				'<div class="fixed-action-btn">',
-    			'<a class="btn-floating btn-large red pulse">',
+    			'<a class="btn-floating btn-large red">',
       			'<i class="large material-icons">av_timer</i>',
 					'</a>',
 				'</div>',

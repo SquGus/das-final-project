@@ -6,7 +6,7 @@ var list = function() {
 		"priority": "medium",
 		"details": "Lorem ipsum",
 		"createdAt": moment('2017-04-28T20:00').format(),
-		"elapsedTime": 10,
+		"elapsedTime": 3678,
 		"finishAt": moment('2017-04-28T21:00').format()
 	}, {
 		"title": "Finish AI project",
