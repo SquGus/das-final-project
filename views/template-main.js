@@ -1,3 +1,6 @@
+var addModal = require('../views/add-modal');
+var todoModal = require('../views/todo-modal');
+
 exports.build = function(title, pagetitle, content) {
 	// builds basic template
 	return [
@@ -35,19 +38,12 @@ exports.build = function(title, pagetitle, content) {
       			'<i class="large material-icons">av_timer</i>',
 					'</a>',
 				'</div>',
-				'<div id="modal-add" class="modal">',
-					'<div class="modal-content">',
-						'<h4 class="modal-header">Add To-Do</h4>',
-						'<p>A bunch of text</p>',
-					'</div>',
-					'<div class="modal-footer">',
-						'<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>',
-					'</div>',
-				'</div>',
+				addModal.getPartial,
+				todoModal.getPartial,
 			'</main>',
 			'<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>',
 			'<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>',
-			'<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>'+
+			'<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>',
 			'<script src="js/manageTodos.js"></script>',
 		'</body>',
 	].join('')

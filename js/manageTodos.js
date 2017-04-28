@@ -28,6 +28,7 @@ $(function() {
 					'data-created="'+todo.createdAt+'"'+
 					'data-elapsed="'+todo.elapsedTime+'"'+
 					'data-finish="'+todo.finishAt+'"'+
+					'data-complete="'+todo.isComplete+'"'+
 				'>'+
 					'<span class="badge '+todo.priority+'">'+
 						todo.priority+
@@ -46,8 +47,9 @@ $(function() {
 				details = todo.attr('data-details'),
 				created = todo.attr('data-created'),
 				elapsed = parseInt(todo.attr('data-elapsed')),
-				finish = todo.attr('data-finish');
-		var duration = getDuration(created, elapsed);
+				finish = todo.attr('data-finish'),
+				complete = todo.attr('data-complete'),
+				duration = getDuration(created, elapsed);
 		
 		modalTodo.find('.modal-header').text(title);
 		modalTodo.find('.modal-header').append(
